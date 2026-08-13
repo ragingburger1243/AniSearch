@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://dqs22hde4ipsn"]
+
+[ext_resource type="Script" uid="uid://b7qenelvbbn8a" path="res://Main.gd" id="1_ig7tw"]
+
+[node name="Control" type="Control" unique_id=53278819]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ig7tw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1001214591]
+layout_mode = 0
+offset_right = 197.0
+offset_bottom = 192.0
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer" unique_id=1848827720]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=1544355428]
+layout_mode = 2
+text = "Search"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="VBoxContainer" unique_id=671520014]
+
+[node name="HTTPRequest2" type="HTTPRequest" parent="VBoxContainer" unique_id=941358407]
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=1529756059]
+layout_mode = 0
+offset_left = 204.0
+offset_top = 1.0
+offset_right = 248.0
+offset_bottom = 30.0
+
+[node name="Label (title)" type="Label" parent="VBoxContainer2" unique_id=1024463099]
+layout_mode = 2
+
+[node name="Label (episodes)" type="Label" parent="VBoxContainer2" unique_id=260665412]
+layout_mode = 2
+
+[node name="Label (score)" type="Label" parent="VBoxContainer2" unique_id=366802602]
+layout_mode = 2
+
+[node name="Label (status)" type="Label" parent="VBoxContainer2" unique_id=1821383118]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=1163309219]
+layout_mode = 0
+offset_left = 671.0
+offset_top = 1.0
+offset_right = 711.0
+offset_bottom = 41.0
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer3" unique_id=216400668]
+layout_mode = 2
+
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="request_completed" from="VBoxContainer/HTTPRequest" to="." method="_on_http_request_request_completed"]
+[connection signal="request_completed" from="VBoxContainer/HTTPRequest2" to="." method="_on_http_request_2_request_completed"]

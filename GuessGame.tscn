@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://7hw42u2acuts"]
+
+[ext_resource type="Script" uid="uid://najnhr3ukewa" path="res://guess_game.gd" id="1_4lhxv"]
+[ext_resource type="Script" uid="uid://bjcwj7uh1dvgj" path="res://button_anim.gd" id="2_d3vie"]
+
+[node name="GuessGame" type="Control" unique_id=774832508]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4lhxv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=728055139]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 0
+offset_left = 793.645
+offset_top = 360.0
+offset_right = 1093.646
+offset_bottom = 560.0
+pivot_offset = Vector2(148.35498, 66)
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer" unique_id=1709864023]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=628611410]
+layout_mode = 2
+text = "Submit"
+script = ExtResource("2_d3vie")
+
+[node name="Button2" type="Button" parent="VBoxContainer" unique_id=1231798580]
+layout_mode = 2
+text = "Start"
+script = ExtResource("2_d3vie")
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer" unique_id=2115117120]
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "ANIME"
+popup/item_0/id = 0
+popup/item_1/text = "MANGA"
+popup/item_1/id = 1
+script = ExtResource("2_d3vie")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=856941475]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 0
+offset_left = 793.645
+offset_top = 500.0
+offset_right = 833.645
+offset_bottom = 540.0
+
+[node name="Label" type="Label" parent="ScrollContainer" unique_id=827334260]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 2
+
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=1640799802]
+
+[node name="Gobackbutton" type="Button" parent="." unique_id=1512300262]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Go back"
+script = ExtResource("2_d3vie")
+
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_button_2_pressed"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
+[connection signal="pressed" from="Gobackbutton" to="." method="_on_gobackbutton_pressed"]

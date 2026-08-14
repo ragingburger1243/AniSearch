@@ -22,8 +22,6 @@ func _ready() -> void:
 	pass
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-
 
 
 func _on_button_pressed() -> void:
@@ -38,7 +36,6 @@ func _on_button_pressed() -> void:
 		if text_option == "USER":
 			var main_dict = {"query": "query ($name: String) { User(name: $name) { name about avatar { large } statistics { anime { count meanScore minutesWatched } manga { count chaptersRead } } } }", "variables": {"name": text}}
 			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
-			print(main_dict)
 		else:
 			count_type = "episodes" if text_option == "ANIME" else "chapters"
 			var main_dict = {"query": "query ($name: String) { Page(perPage: 5) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres } } }", "variables":{"name": text}}
@@ -114,3 +111,7 @@ func _on_item_list_item_selected(index: int) -> void:
 		label_link.text = "ANILIST LINK"
 		label_link.uri = results[index]["siteUrl"]
 		httprequestimage.request(image)
+
+
+func _on_go_to_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://GuessGame.tscn")

@@ -13,9 +13,11 @@ var text = ""
 @onready var description_text = $"VBoxContainer4/ScrollContainer/Label (description)"
 @onready var label_link = $VBoxContainer2/LinkButton 
 @onready var label_genres = $"VBoxContainer2/Label (genres)"
+@onready var item_list = $VBoxContainer/ItemList
 var image = ""
 var text_option = ""
 var count_type
+var results = []
 func _ready() -> void:
 	pass
 
@@ -30,8 +32,8 @@ func _on_button_pressed() -> void:
 	text_option = option_button.get_item_text(index)
 	print(text_option)
 	count_type = "episodes" if text_option == "ANIME" else "chapters"
-
-	var main_dict = {"query": "query ($name: String) { Media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres }  }", "variables":{"name": text}}
+	
+	var main_dict = {"query": "query ($name: String) { Page(perPage: 5) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres } } }", "variables":{"name": text}}
 	if text == "":
 		lineEdit.text = "ERROR"
 		return
@@ -45,26 +47,16 @@ func _on_button_pressed() -> void:
 
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	var new_body = body.get_string_from_utf8()
-	var dict = JSON.parse_string(new_body)
-	var desc = str(dict["data"]["Media"]["description"])
-	desc = desc.replace("<br>", "\n")
-	desc = desc.replace("<i>", "")
-	desc = desc.replace("</i>", "")
 
-	if dict["data"]["Media"]["title"]["english"] == null:
-		lineEdit.text = "ERROR"
-	else:
-		print(dict["data"]["Media"]["genres"])
-		label_title.text =  "ENGLISH TITLE: " + dict["data"]["Media"]["title"]["english"]
-		label_episodes.text =  count_type.to_upper() + " COUNT: " + str(dict["data"]["Media"][count_type])
-		label_score.text = "SCORE:  " + str(dict["data"]["Media"]["averageScore"])
-		label_status.text = "STATUS: " + str(dict["data"]["Media"]["status"])
-		description_text.text = "DESCRIPTION: " + desc
-		image = dict["data"]["Media"]["coverImage"]["large"]
-		label_genres.text = "GENRES: " + ", ".join(dict["data"]["Media"]["genres"])
-		label_link.text = "ANILIST LINK"
-		label_link.uri = dict["data"]["Media"]["siteUrl"]
-		httprequestimage.request(image)
+	var dict = JSON.parse_string(new_body)
+	item_list.clear()
+	for item in dict["data"]["Page"]["media"]:
+		var title = item["title"]["english"] if item["title"]["english"] != null else item["title"]["romaji"]
+		item_list.add_item(title)
+	results = dict["data"]["Page"]["media"]
+	
+
+
 
 
 func _on_http_request_2_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
@@ -75,5 +67,24 @@ func _on_http_request_2_request_completed(result: int, response_code: int, heade
 	
 	
 	
-	
-	
+func _on_item_list_item_selected(index: int) -> void:
+	var desc = str(results[index]["description"])
+	desc = desc.replace("<br>", "\n")
+	desc = desc.replace("<i>", "")
+	desc = desc.replace("</i>", "")
+	if results[index] == null:
+		lineEdit.text = "ERROR"
+	else:
+		if results[index]["title"]["english"] != null:
+			label_title.text =  "ENGLISH TITLE: " + results[index]["title"]["english"]
+		else:
+			label_title.text =  "ENGLISH TITLE: " + results[index]["title"]["romaji"]
+		label_episodes.text =  count_type.to_upper() + " COUNT: " + str(results[index][count_type])
+		label_score.text = "SCORE:  " + str(results[index]["averageScore"])
+		label_status.text = "STATUS: " + str(results[index]["status"])
+		description_text.text = "DESCRIPTION: " + desc
+		image = results[index]["coverImage"]["large"]
+		label_genres.text = "GENRES: " + ", ".join(results[index]["genres"])
+		label_link.text = "ANILIST LINK"
+		label_link.uri = results[index]["siteUrl"]
+		httprequestimage.request(image)

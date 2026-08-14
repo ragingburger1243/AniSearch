@@ -10,6 +10,9 @@ var text = ""
 @onready var label_status = $"VBoxContainer2/Label (status)"
 @onready var texture_rect = $VBoxContainer3/TextureRect
 @onready var option_button = $OptionButton
+@onready var description_text = $"VBoxContainer4/ScrollContainer/Label (description)"
+@onready var label_link = $VBoxContainer2/LinkButton 
+@onready var label_genres = $"VBoxContainer2/Label (genres)"
 var image = ""
 var text_option = ""
 var count_type
@@ -28,8 +31,13 @@ func _on_button_pressed() -> void:
 	print(text_option)
 	count_type = "episodes" if text_option == "ANIME" else "chapters"
 
-	var main_dict = {"query": "query ($name: String) { Media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } }  }", "variables":{"name": text}}
-	httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
+	var main_dict = {"query": "query ($name: String) { Media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres }  }", "variables":{"name": text}}
+	if text == "":
+		lineEdit.text = "ERROR"
+		return
+		
+	else:
+		httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 
 
 	
@@ -38,15 +46,24 @@ func _on_button_pressed() -> void:
 func _on_http_request_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
 	var new_body = body.get_string_from_utf8()
 	var dict = JSON.parse_string(new_body)
-	if dict["data"]["Media"] == null:
+	var desc = str(dict["data"]["Media"]["description"])
+	desc = desc.replace("<br>", "\n")
+	desc = desc.replace("<i>", "")
+	desc = desc.replace("</i>", "")
+
+	if dict["data"]["Media"]["title"]["english"] == null:
 		lineEdit.text = "ERROR"
 	else:
-		print(dict)
+		print(dict["data"]["Media"]["genres"])
 		label_title.text =  "ENGLISH TITLE: " + dict["data"]["Media"]["title"]["english"]
 		label_episodes.text =  count_type.to_upper() + " COUNT: " + str(dict["data"]["Media"][count_type])
 		label_score.text = "SCORE:  " + str(dict["data"]["Media"]["averageScore"])
 		label_status.text = "STATUS: " + str(dict["data"]["Media"]["status"])
+		description_text.text = "DESCRIPTION: " + desc
 		image = dict["data"]["Media"]["coverImage"]["large"]
+		label_genres.text = "GENRES: " + ", ".join(dict["data"]["Media"]["genres"])
+		label_link.text = "ANILIST LINK"
+		label_link.uri = dict["data"]["Media"]["siteUrl"]
 		httprequestimage.request(image)
 
 

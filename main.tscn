@@ -46,6 +46,13 @@ layout_mode = 2
 [node name="Label (status)" type="Label" parent="VBoxContainer2" unique_id=1821383118]
 layout_mode = 2
 
+[node name="LinkButton" type="LinkButton" parent="VBoxContainer2" unique_id=1880522671]
+layout_mode = 2
+
+[node name="Label (genres)" type="Label" parent="VBoxContainer2" unique_id=730202431]
+layout_mode = 2
+autowrap_mode = 2
+
 [node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=1163309219]
 layout_mode = 0
 offset_left = 671.0
@@ -67,6 +74,23 @@ popup/item_0/text = "ANIME"
 popup/item_0/id = 0
 popup/item_1/text = "MANGA"
 popup/item_1/id = 1
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="." unique_id=274778978]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 277.0
+offset_right = 121.0
+offset_bottom = 339.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer4" unique_id=475594796]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 2
+
+[node name="Label (description)" type="Label" parent="VBoxContainer4/ScrollContainer" unique_id=1485731921]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 2
 
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="request_completed" from="VBoxContainer/HTTPRequest" to="." method="_on_http_request_request_completed"]

@@ -30,7 +30,6 @@ func _on_button_pressed() -> void:
 	text = lineEdit.text
 	var index = option_button.selected
 	text_option = option_button.get_item_text(index)
-	print(text_option)
 	count_type = "episodes" if text_option == "ANIME" else "chapters"
 	
 	var main_dict = {"query": "query ($name: String) { Page(perPage: 5) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres } } }", "variables":{"name": text}}

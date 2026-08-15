@@ -14,6 +14,10 @@ config/name="AnilistApp"
 run/main_scene="uid://dqs22hde4ipsn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 
+[autoload]
+
+SaveManager="*uid://cv8a3etwp4ca8"
+
 [display]
 
 window/size/viewport_width=1920

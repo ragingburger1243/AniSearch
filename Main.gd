@@ -38,7 +38,7 @@ func _on_button_pressed() -> void:
 			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 		else:
 			count_type = "episodes" if text_option == "ANIME" else "chapters"
-			var main_dict = {"query": "query ($name: String) { Page(perPage: 5) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres } } }", "variables":{"name": text}}
+			var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres } } }", "variables":{"name": text}}
 			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 
 		
@@ -51,7 +51,7 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 	var new_body = body.get_string_from_utf8()
 	
 	var dict = JSON.parse_string(new_body)
-	
+	print(dict)
 	item_list.clear()
 	if text_option == "USER":
 		var about_old = dict["data"]["User"]["about"]
@@ -91,10 +91,13 @@ func _on_http_request_2_request_completed(result: int, response_code: int, heade
 	
 	
 func _on_item_list_item_selected(index: int) -> void:
+	
 	var desc = str(results[index]["description"])
 	desc = desc.replace("<br>", "\n")
 	desc = desc.replace("<i>", "")
 	desc = desc.replace("</i>", "")
+	desc = desc.replace("</b>", "")
+	desc = desc.replace("<b>", "")
 	if results[index] == null:
 		lineEdit.text = "ERROR"
 	else:

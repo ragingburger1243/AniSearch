@@ -113,8 +113,31 @@ theme_override_font_sizes/font_size = 40
 text = "Go to game"
 script = ExtResource("2_0xm2m")
 
+[node name="VBoxContainer5" type="VBoxContainer" parent="." unique_id=14084478]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 0
+offset_left = 1.0
+offset_top = 553.0
+offset_right = 41.0
+offset_bottom = 593.0
+
+[node name="Button" type="Button" parent="VBoxContainer5" unique_id=1287451742]
+layout_mode = 2
+text = "Save to file"
+
+[node name="Button2" type="Button" parent="VBoxContainer5" unique_id=996498257]
+layout_mode = 2
+text = "Load from file"
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer5" unique_id=334296032]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
 [connection signal="request_completed" from="VBoxContainer/HTTPRequest" to="." method="_on_http_request_request_completed"]
 [connection signal="request_completed" from="VBoxContainer/HTTPRequest2" to="." method="_on_http_request_2_request_completed"]
 [connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="GoToButton" to="." method="_on_go_to_button_pressed"]
+[connection signal="pressed" from="VBoxContainer5/Button" to="." method="_on_buttonsave_pressed"]
+[connection signal="pressed" from="VBoxContainer5/Button2" to="." method="_on_button_load_pressed"]
+[connection signal="item_selected" from="VBoxContainer5/ItemList" to="." method="_on_item_list_item_save_system_selected"]

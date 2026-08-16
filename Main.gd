@@ -14,13 +14,13 @@ var text = ""
 @onready var label_link = $VBoxContainer2/LinkButton 
 @onready var label_genres = $"VBoxContainer2/Label (genres)"
 @onready var item_list = $VBoxContainer/ItemList
+@onready var item_list_favorites = $VBoxContainer5/ItemList
 var image = ""
 var text_option = ""
 var count_type
 var results = []
-func _ready() -> void:
+func _ready() -> void:	
 	pass
-
 
 
 
@@ -51,7 +51,6 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 	var new_body = body.get_string_from_utf8()
 	
 	var dict = JSON.parse_string(new_body)
-	print(dict)
 	item_list.clear()
 	if text_option == "USER":
 		var about_old = dict["data"]["User"]["about"]
@@ -91,6 +90,10 @@ func _on_http_request_2_request_completed(result: int, response_code: int, heade
 	
 	
 func _on_item_list_item_selected(index: int) -> void:
+	if results[index]["title"]["english"] != null:
+		lineEdit.text = str(results[index]["title"]["english"])
+	else:
+		lineEdit.text = str(results[index]["title"]["romaji"])
 	
 	var desc = str(results[index]["description"])
 	desc = desc.replace("<br>", "\n")
@@ -101,10 +104,6 @@ func _on_item_list_item_selected(index: int) -> void:
 	if results[index] == null:
 		lineEdit.text = "ERROR"
 	else:
-		if results[index]["title"]["english"] != null:
-			label_title.text =  "ENGLISH TITLE: " + results[index]["title"]["english"]
-		else:
-			label_title.text =  "ROMAJI TITLE: " + results[index]["title"]["romaji"]
 		label_episodes.text =  count_type.to_upper() + " COUNT: " + str(results[index][count_type])
 		label_score.text = "SCORE:  " + str(results[index]["averageScore"])
 		label_status.text = "STATUS: " + str(results[index]["status"])
@@ -114,7 +113,44 @@ func _on_item_list_item_selected(index: int) -> void:
 		label_link.text = "ANILIST LINK"
 		label_link.uri = results[index]["siteUrl"]
 		httprequestimage.request(image)
+		if results[index]["title"]["english"] != null:
+			label_title.text =  "ENGLISH TITLE: " + results[index]["title"]["english"]
+		else:
+			label_title.text =  "ROMAJI TITLE: " + results[index]["title"]["romaji"]
 
 
 func _on_go_to_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://GuessGame.tscn")
+
+
+func _on_buttonsave_pressed() -> void:
+	if "Favorites" not in SaveManager.dictionary:
+		SaveManager.dictionary["Favorites"] = []
+		
+	SaveManager.dictionary["Favorites"].append({"name": lineEdit.text, "type": text_option})
+	SaveManager.json_save()
+	print("Saved!")
+
+
+func _on_button_load_pressed() -> void:
+	SaveManager.json_load()
+	item_list_favorites.clear()
+	for item in SaveManager.new_dict["Favorites"]:
+		print(item)		
+		item_list_favorites.add_item(item["name"])
+
+
+func _on_item_list_item_save_system_selected(index: int) -> void:
+	
+	var save = SaveManager.new_dict["Favorites"][index]["type"]
+	print(save)
+	var selected_text = item_list_favorites.get_item_text(index)
+	print("Selected Item: " + selected_text)
+	if save == "MANGA" or save == "ANIME":
+		count_type = "episodes" if save == "ANIME" else "chapters"
+		var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + save + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres } } }", "variables":{"name": selected_text}}
+		httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
+		
+		
+		
+		

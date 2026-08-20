@@ -12,11 +12,6 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-
-
 func json_save():
 	json = JSON.stringify(dictionary)
 	var file = FileAccess.open("user://save_data.dat", FileAccess.WRITE)

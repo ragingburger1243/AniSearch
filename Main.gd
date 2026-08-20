@@ -167,7 +167,10 @@ func _on_item_list_item_reco_selected(index: int) -> void:
 	if Type == "MANGA" or Type == "ANIME":
 		count_type = "episodes" if results_reco_new["type"] == "anime" else "chapters"
 		search_media(anime_name, Type, count_type)
-			
+
+
+
+
 func get_title(item):
 	if item["title"]["english"] != null:
 		return item["title"]["english"]
@@ -181,10 +184,10 @@ func clean_desc(desc):
 	desc = desc.replace("</b>", "")
 	desc = desc.replace("<b>", "")
 
-func search_media(name, type, count_type):
-	var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + type + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": name}}
+func search_media(name_media, type_media, count_type_media):
+	var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + type_media + ") { title { romaji english } " + count_type_media + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": name_media}}
 	httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 
-func search_user(name):
-	var main_dict = {"query": "query ($name: String) { User(name: $name) { name about avatar { large } statistics { anime { count meanScore minutesWatched } manga { count chaptersRead } } } }", "variables": {"name": name}}
+func search_user(name_user):
+	var main_dict = {"query": "query ($name: String) { User(name: $name) { name about avatar { large } statistics { anime { count meanScore minutesWatched } manga { count chaptersRead } } } }", "variables": {"name": name_user}}
 	httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST, JSON.stringify(main_dict))	

@@ -161,7 +161,7 @@ func _on_item_list_item_save_system_selected(index: int) -> void:
 func _on_item_list_item_reco_selected(index: int) -> void:
 	var results_reco_new = reco_data[index]["mediaRecommendation"]
 	var Type = results_reco_new["type"]
-	var anime_name
+	var anime_name = get_title(results_reco_new) 
 	lineEdit.text = get_title(results_reco_new)
 	
 	if Type == "MANGA" or Type == "ANIME":

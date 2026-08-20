@@ -133,6 +133,21 @@ text = "Load from file"
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 
+[node name="VBoxContainer6" type="VBoxContainer" parent="." unique_id=1657202478]
+layout_mode = 0
+offset_left = 354.0
+offset_top = 596.0
+offset_right = 554.0
+offset_bottom = 823.0
+
+[node name="Label" type="Label" parent="VBoxContainer6" unique_id=1855532238]
+layout_mode = 2
+text = "Reccomendations"
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer6" unique_id=1378113604]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+
 [connection signal="request_completed" from="VBoxContainer/HTTPRequest" to="." method="_on_http_request_request_completed"]
 [connection signal="request_completed" from="VBoxContainer/HTTPRequest2" to="." method="_on_http_request_2_request_completed"]
 [connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]

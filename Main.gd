@@ -15,10 +15,12 @@ var text = ""
 @onready var label_genres = $"VBoxContainer2/Label (genres)"
 @onready var item_list = $VBoxContainer/ItemList
 @onready var item_list_favorites = $VBoxContainer5/ItemList
+@onready var item_list_reccomend = $VBoxContainer6/ItemList
 var image = ""
 var text_option = ""
 var count_type
 var results = []
+var resuluts_reco = []
 func _ready() -> void:	
 	pass
 
@@ -38,7 +40,7 @@ func _on_button_pressed() -> void:
 			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 		else:
 			count_type = "episodes" if text_option == "ANIME" else "chapters"
-			var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 5, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl } } } } } }", "variables":{"name": text}}
+			var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl } } } } } }", "variables":{"name": text}}
 			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 
 		
@@ -75,9 +77,15 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 		for item in dict["data"]["Page"]["media"]:
 			var title = item["title"]["english"] if item["title"]["english"] != null else item["title"]["romaji"]
 			item_list.add_item(title)
-	
+			
+			for recommendation in item["recommendations"]["nodes"]:
+				var reco_title = recommendation["mediaRecommendation"]["title"]["english"] if recommendation["mediaRecommendation"]["title"]["english"] != null else recommendation["mediaRecommendation"]["title"]["romaji"]
+				item_list_reccomend.add_item(reco_title)
+			
 		results = dict["data"]["Page"]["media"]
-	
+		
+		print(resuluts_reco)
+		
 
 
 

@@ -20,7 +20,9 @@ var image = ""
 var text_option = ""
 var count_type
 var results = []
-var resuluts_reco = []
+var results_reco = []
+var reco_titles = []
+var reco_data = []
 func _ready() -> void:	
 	pass
 
@@ -40,7 +42,7 @@ func _on_button_pressed() -> void:
 			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 		else:
 			count_type = "episodes" if text_option == "ANIME" else "chapters"
-			var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl } } } } } }", "variables":{"name": text}}
+			var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl type } } } } } }", "variables":{"name": text}}
 			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 
 		
@@ -74,17 +76,25 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 
 		httprequestimage.request(image)
 	else:
+		reco_data.clear()
+		item_list_reccomend.clear()
+		reco_titles.clear()
+
 		for item in dict["data"]["Page"]["media"]:
 			var title = item["title"]["english"] if item["title"]["english"] != null else item["title"]["romaji"]
 			item_list.add_item(title)
-			
+	
 			for recommendation in item["recommendations"]["nodes"]:
-				var reco_title = recommendation["mediaRecommendation"]["title"]["english"] if recommendation["mediaRecommendation"]["title"]["english"] != null else recommendation["mediaRecommendation"]["title"]["romaji"]
-				item_list_reccomend.add_item(reco_title)
+				if recommendation["mediaRecommendation"] != null:
+					var reco_title = recommendation["mediaRecommendation"]["title"]["english"] if recommendation["mediaRecommendation"]["title"]["english"] != null else recommendation["mediaRecommendation"]["title"]["romaji"]
+					if not reco_titles.has(reco_title):
+						reco_titles.append(reco_title)
+						reco_data.append(recommendation)
+						item_list_reccomend.add_item(reco_title)
+		
 			
 		results = dict["data"]["Page"]["media"]
 		
-		print(resuluts_reco)
 		
 
 
@@ -157,9 +167,30 @@ func _on_item_list_item_save_system_selected(index: int) -> void:
 	print("Selected Item: " + selected_text)
 	if save == "MANGA" or save == "ANIME":
 		count_type = "episodes" if save == "ANIME" else "chapters"
-		var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + save + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 5, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl } } } } } }", "variables":{"name": selected_text}}
+		var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + save + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": selected_text}}
 		httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
 		
 		
 		
 		
+
+
+func _on_item_list_item_reco_selected(index: int) -> void:
+	var results_reco_new = reco_data[index]["mediaRecommendation"]
+	var Type = results_reco_new["type"]
+	var anime_name
+	if results_reco_new["title"]["english"] != null:
+		lineEdit.text = str(results_reco_new["title"]["english"])
+		anime_name = results_reco_new["title"]["english"]
+	else:
+		lineEdit.text = str(results_reco_new["title"]["romaji"])
+		anime_name = results_reco_new["title"]["romaji"]
+		
+		
+		if Type == "MANGA" or Type == "ANIME":
+			count_type = "episodes" if results_reco_new["type"] == "anime" else "chapters"
+			var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + Type + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": anime_name}}
+			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
+			
+			
+	

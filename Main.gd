@@ -38,12 +38,10 @@ func _on_button_pressed() -> void:
 		return
 	else:
 		if text_option == "USER":
-			var main_dict = {"query": "query ($name: String) { User(name: $name) { name about avatar { large } statistics { anime { count meanScore minutesWatched } manga { count chaptersRead } } } }", "variables": {"name": text}}
-			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
+			search_user(text)
 		else:
 			count_type = "episodes" if text_option == "ANIME" else "chapters"
-			var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + text_option + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl type } } } } } }", "variables":{"name": text}}
-			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
+			search_media(text, text_option, count_type)
 
 		
 
@@ -115,11 +113,7 @@ func _on_item_list_item_selected(index: int) -> void:
 		lineEdit.text = str(results[index]["title"]["romaji"])
 	
 	var desc = str(results[index]["description"])
-	desc = desc.replace("<br>", "\n")
-	desc = desc.replace("<i>", "")
-	desc = desc.replace("</i>", "")
-	desc = desc.replace("</b>", "")
-	desc = desc.replace("<b>", "")
+	clean_desc(desc)
 	if results[index] == null:
 		lineEdit.text = "ERROR"
 	else:
@@ -132,11 +126,7 @@ func _on_item_list_item_selected(index: int) -> void:
 		label_link.text = "ANILIST LINK"
 		label_link.uri = results[index]["siteUrl"]
 		httprequestimage.request(image)
-		if results[index]["title"]["english"] != null:
-			label_title.text =  "ENGLISH TITLE: " + results[index]["title"]["english"]
-		else:
-			label_title.text =  "ROMAJI TITLE: " + results[index]["title"]["romaji"]
-
+		label_title.text = "TITLE: " + get_title(results[index])
 
 func _on_go_to_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://GuessGame.tscn")
@@ -162,35 +152,39 @@ func _on_button_load_pressed() -> void:
 func _on_item_list_item_save_system_selected(index: int) -> void:
 	
 	var save = SaveManager.new_dict["Favorites"][index]["type"]
-	print(save)
 	var selected_text = item_list_favorites.get_item_text(index)
-	print("Selected Item: " + selected_text)
 	if save == "MANGA" or save == "ANIME":
 		count_type = "episodes" if save == "ANIME" else "chapters"
-		var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + save + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": selected_text}}
-		httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
+		search_media(selected_text, save, count_type)
+			
 		
-		
-		
-		
-
-
 func _on_item_list_item_reco_selected(index: int) -> void:
 	var results_reco_new = reco_data[index]["mediaRecommendation"]
 	var Type = results_reco_new["type"]
 	var anime_name
-	if results_reco_new["title"]["english"] != null:
-		lineEdit.text = str(results_reco_new["title"]["english"])
-		anime_name = results_reco_new["title"]["english"]
-	else:
-		lineEdit.text = str(results_reco_new["title"]["romaji"])
-		anime_name = results_reco_new["title"]["romaji"]
-		
-		
-		if Type == "MANGA" or Type == "ANIME":
-			count_type = "episodes" if results_reco_new["type"] == "anime" else "chapters"
-			var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + Type + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": anime_name}}
-			httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
-			
-			
+	lineEdit.text = get_title(results_reco_new)
 	
+	if Type == "MANGA" or Type == "ANIME":
+		count_type = "episodes" if results_reco_new["type"] == "anime" else "chapters"
+		search_media(anime_name, Type, count_type)
+			
+func get_title(item):
+	if item["title"]["english"] != null:
+		return item["title"]["english"]
+	else:
+		return item["title"]["romaji"]			
+
+func clean_desc(desc):
+	desc = desc.replace("<br>", "\n")
+	desc = desc.replace("<i>", "")
+	desc = desc.replace("</i>", "")
+	desc = desc.replace("</b>", "")
+	desc = desc.replace("<b>", "")
+
+func search_media(name, type, count_type):
+	var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + type + ") { title { romaji english } " + count_type + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": name}}
+	httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
+
+func search_user(name):
+	var main_dict = {"query": "query ($name: String) { User(name: $name) { name about avatar { large } statistics { anime { count meanScore minutesWatched } manga { count chaptersRead } } } }", "variables": {"name": name}}
+	httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST, JSON.stringify(main_dict))	

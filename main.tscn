@@ -12,97 +12,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ig7tw")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1001214591]
-layout_mode = 0
-offset_left = 6.0
-offset_right = 203.0
-offset_bottom = 270.0
-pivot_offset = Vector2(101, 136)
-
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer" unique_id=1848827720]
-layout_mode = 2
-
-[node name="HTTPRequest" type="HTTPRequest" parent="VBoxContainer" unique_id=671520014]
-
-[node name="HTTPRequest2" type="HTTPRequest" parent="VBoxContainer" unique_id=941358407]
-
-[node name="ItemList" type="ItemList" parent="VBoxContainer" unique_id=500493609]
-custom_minimum_size = Vector2(0, 200)
-layout_mode = 2
-
-[node name="Button" type="Button" parent="VBoxContainer" unique_id=1544355428]
-layout_mode = 2
-text = "Search"
-script = ExtResource("2_0xm2m")
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=1529756059]
-layout_mode = 0
-offset_left = 204.0
-offset_top = 1.0
-offset_right = 248.0
-offset_bottom = 30.0
-
-[node name="Label (title)" type="Label" parent="VBoxContainer2" unique_id=1024463099]
-layout_mode = 2
-
-[node name="Label (episodes)" type="Label" parent="VBoxContainer2" unique_id=260665412]
-layout_mode = 2
-
-[node name="Label (score)" type="Label" parent="VBoxContainer2" unique_id=366802602]
-layout_mode = 2
-
-[node name="Label (status)" type="Label" parent="VBoxContainer2" unique_id=1821383118]
-layout_mode = 2
-
-[node name="LinkButton" type="LinkButton" parent="VBoxContainer2" unique_id=1880522671]
-layout_mode = 2
-
-[node name="Label (genres)" type="Label" parent="VBoxContainer2" unique_id=730202431]
-layout_mode = 2
-autowrap_mode = 2
-
-[node name="VBoxContainer3" type="VBoxContainer" parent="." unique_id=1163309219]
-layout_mode = 0
-offset_left = 671.0
-offset_top = 1.0
-offset_right = 711.0
-offset_bottom = 41.0
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer3" unique_id=216400668]
-layout_mode = 2
-
-[node name="VBoxContainer4" type="VBoxContainer" parent="." unique_id=274778978]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 318.0
-offset_right = 301.0
-offset_bottom = 518.0
-
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer4" unique_id=475594796]
-custom_minimum_size = Vector2(300, 200)
-layout_mode = 2
-
-[node name="Label (description)" type="Label" parent="VBoxContainer4/ScrollContainer" unique_id=1485731921]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-autowrap_mode = 2
-
-[node name="OptionButton" type="OptionButton" parent="." unique_id=1522516728]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 274.0
-offset_right = 204.0
-offset_bottom = 305.0
-item_count = 3
-popup/item_0/text = "ANIME"
-popup/item_0/id = 0
-popup/item_1/text = "MANGA"
-popup/item_1/id = 1
-popup/item_2/text = "USER"
-popup/item_2/id = 2
-script = ExtResource("2_0xm2m")
-
 [node name="GoToButton" type="Button" parent="." unique_id=961700259]
 layout_mode = 0
 offset_left = 15.0
@@ -113,47 +22,141 @@ theme_override_font_sizes/font_size = 40
 text = "Go to game"
 script = ExtResource("2_0xm2m")
 
-[node name="VBoxContainer5" type="VBoxContainer" parent="." unique_id=14084478]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 0
-offset_left = 1.0
-offset_top = 553.0
-offset_right = 41.0
-offset_bottom = 593.0
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=180798757]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="Button" type="Button" parent="VBoxContainer5" unique_id=1287451742]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=585855990]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-text = "Save to file"
 
-[node name="Button2" type="Button" parent="VBoxContainer5" unique_id=996498257]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1547652217]
 layout_mode = 2
-text = "Load from file"
+alignment = 1
 
-[node name="ItemList" type="ItemList" parent="VBoxContainer5" unique_id=334296032]
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1848827720]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search anime, manga, or user..."
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1522516728]
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "ANIME"
+popup/item_0/id = 0
+popup/item_1/text = "MANGA"
+popup/item_1/id = 1
+popup/item_2/text = "USER"
+popup/item_2/id = 2
+script = ExtResource("2_0xm2m")
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1544355428]
+layout_mode = 2
+text = "Search"
+script = ExtResource("2_0xm2m")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=671520014]
+
+[node name="HTTPRequest2" type="HTTPRequest" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=941358407]
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=574432831]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1551426921]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=811134477]
+layout_mode = 2
+text = "Results:"
+
+[node name="ItemList" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=500493609]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 
-[node name="VBoxContainer6" type="VBoxContainer" parent="." unique_id=1657202478]
-layout_mode = 0
-offset_left = 354.0
-offset_top = 596.0
-offset_right = 554.0
-offset_bottom = 823.0
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1175677883]
+layout_mode = 2
+text = "Favorites:"
 
-[node name="Label" type="Label" parent="VBoxContainer6" unique_id=1855532238]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=2116559279]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer" unique_id=996498257]
+layout_mode = 2
+text = "Load from file"
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer" unique_id=1287451742]
+layout_mode = 2
+text = "Save to file"
+
+[node name="ItemList2" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=334296032]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1649455094]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=1211357907]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer" unique_id=216400668]
+custom_minimum_size = Vector2(100, 140)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer" unique_id=1732731952]
+layout_mode = 2
+
+[node name="Label (title)" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer" unique_id=1024463099]
+layout_mode = 2
+
+[node name="Label (episodes)" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer" unique_id=260665412]
+layout_mode = 2
+
+[node name="Label (score)" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer" unique_id=366802602]
+layout_mode = 2
+
+[node name="Label (status)" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer" unique_id=1821383118]
+layout_mode = 2
+
+[node name="LinkButton" type="LinkButton" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer" unique_id=1880522671]
+layout_mode = 2
+
+[node name="Label (genres)" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer" unique_id=730202431]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=475594796]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 2
+
+[node name="Label (description)" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer" unique_id=1485731921]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=1855532238]
 layout_mode = 2
 text = "Reccomendations"
 
-[node name="ItemList" type="ItemList" parent="VBoxContainer6" unique_id=1378113604]
-custom_minimum_size = Vector2(200, 200)
+[node name="ItemList" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2" unique_id=1378113604]
+custom_minimum_size = Vector2(200, 120)
 layout_mode = 2
 
-[connection signal="request_completed" from="VBoxContainer/HTTPRequest" to="." method="_on_http_request_request_completed"]
-[connection signal="request_completed" from="VBoxContainer/HTTPRequest2" to="." method="_on_http_request_2_request_completed"]
-[connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
-[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="GoToButton" to="." method="_on_go_to_button_pressed"]
-[connection signal="pressed" from="VBoxContainer5/Button" to="." method="_on_buttonsave_pressed"]
-[connection signal="pressed" from="VBoxContainer5/Button2" to="." method="_on_button_load_pressed"]
-[connection signal="item_selected" from="VBoxContainer5/ItemList" to="." method="_on_item_list_item_save_system_selected"]
-[connection signal="item_selected" from="VBoxContainer6/ItemList" to="." method="_on_item_list_item_reco_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="request_completed" from="MarginContainer/VBoxContainer/HBoxContainer/HTTPRequest" to="." method="_on_http_request_request_completed"]
+[connection signal="request_completed" from="MarginContainer/VBoxContainer/HBoxContainer/HTTPRequest2" to="." method="_on_http_request_2_request_completed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer/Button2" to="." method="_on_button_load_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainer/Button" to="." method="_on_buttonsave_pressed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ItemList2" to="." method="_on_item_list_item_save_system_selected"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ItemList" to="." method="_on_item_list_item_reco_selected"]

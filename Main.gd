@@ -1,21 +1,21 @@
 extends Control
 
-@onready var lineEdit = $VBoxContainer/LineEdit
+@onready var lineEdit = $MarginContainer/VBoxContainer/HBoxContainer/LineEdit
 var text = ""
-@onready var httprequest = $VBoxContainer/HTTPRequest
-@onready var httprequestimage = $VBoxContainer/HTTPRequest2
-@onready var label_title = $"VBoxContainer2/Label (title)"
-@onready var label_episodes =  $"VBoxContainer2/Label (episodes)" 
-@onready var label_score = $"VBoxContainer2/Label (score)"
-@onready var label_status = $"VBoxContainer2/Label (status)"
-@onready var texture_rect = $VBoxContainer3/TextureRect
-@onready var option_button = $OptionButton
-@onready var description_text = $"VBoxContainer4/ScrollContainer/Label (description)"
-@onready var label_link = $VBoxContainer2/LinkButton 
-@onready var label_genres = $"VBoxContainer2/Label (genres)"
-@onready var item_list = $VBoxContainer/ItemList
-@onready var item_list_favorites = $VBoxContainer5/ItemList
-@onready var item_list_reccomend = $VBoxContainer6/ItemList
+@onready var httprequest = $MarginContainer/VBoxContainer/HBoxContainer/HTTPRequest
+@onready var httprequestimage = $MarginContainer/VBoxContainer/HBoxContainer/HTTPRequest2
+@onready var label_title = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (title)"
+@onready var label_episodes = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (episodes)"
+@onready var label_score = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (score)"
+@onready var label_status = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (status)"
+@onready var texture_rect = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/TextureRect
+@onready var option_button = $MarginContainer/VBoxContainer/HBoxContainer/OptionButton
+@onready var description_text = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer/Label (description)"
+@onready var label_link = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/LinkButton
+@onready var label_genres = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (genres)"
+@onready var item_list = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ItemList
+@onready var item_list_favorites = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ItemList2
+@onready var item_list_reccomend = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ItemList
 var image = ""
 var text_option = ""
 var count_type
@@ -187,6 +187,7 @@ func clean_desc(desc):
 func search_media(name_media, type_media, count_type_media):
 	var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + type_media + ") { title { romaji english } " + count_type_media + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": name_media}}
 	httprequest.request("https://graphql.anilist.co", ["Content-Type: application/json"], HTTPClient.METHOD_POST,JSON.stringify(main_dict))
+	print(main_dict)
 
 func search_user(name_user):
 	var main_dict = {"query": "query ($name: String) { User(name: $name) { name about avatar { large } statistics { anime { count meanScore minutesWatched } manga { count chaptersRead } } } }", "variables": {"name": name_user}}

@@ -4,18 +4,18 @@ extends Control
 var text = ""
 @onready var httprequest = $MarginContainer/VBoxContainer/HBoxContainer/HTTPRequest
 @onready var httprequestimage = $MarginContainer/VBoxContainer/HBoxContainer/HTTPRequest2
-@onready var label_title = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (title)"
-@onready var label_episodes = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (episodes)"
-@onready var label_score = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (score)"
-@onready var label_status = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (status)"
-@onready var texture_rect = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/TextureRect
+@onready var label_title = $"MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (title)"
+@onready var label_episodes = $"MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (episodes)"
+@onready var label_score = $"MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (score)"
+@onready var label_status = $"MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (status)"
+@onready var texture_rect = $MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/HBoxContainer/TextureRect
 @onready var option_button = $MarginContainer/VBoxContainer/HBoxContainer/OptionButton
-@onready var description_text = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ScrollContainer/Label (description)"
-@onready var label_link = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/LinkButton
-@onready var label_genres = $"MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (genres)"
-@onready var item_list = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ItemList
-@onready var item_list_favorites = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/ItemList2
-@onready var item_list_reccomend = $MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ItemList
+@onready var description_text = $"MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/ScrollContainer/Label (description)"
+@onready var label_link = $MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/LinkButton
+@onready var label_genres = $"MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/HBoxContainer/VBoxContainer/Label (genres)"
+@onready var item_list = $MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/VBoxContainer/ItemList
+@onready var item_list_favorites = $MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/VBoxContainer/ItemList2
+@onready var item_list_reccomend = $MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/VBoxContainer2/ItemList
 var image = ""
 var text_option = ""
 var count_type
@@ -117,7 +117,10 @@ func _on_item_list_item_selected(index: int) -> void:
 	if results[index] == null:
 		lineEdit.text = "ERROR"
 	else:
-		label_episodes.text =  count_type.to_upper() + " COUNT: " + str(results[index][count_type])
+		if results[index].has(count_type):
+			label_episodes.text = count_type.to_upper() + " COUNT: " + str(results[index][count_type])
+		else:
+			label_episodes.text = ""
 		label_score.text = "SCORE:  " + str(results[index]["averageScore"])
 		label_status.text = "STATUS: " + str(results[index]["status"])
 		description_text.text = "DESCRIPTION: " + desc
@@ -183,6 +186,7 @@ func clean_desc(desc):
 	desc = desc.replace("</i>", "")
 	desc = desc.replace("</b>", "")
 	desc = desc.replace("<b>", "")
+	return desc
 
 func search_media(name_media, type_media, count_type_media):
 	var main_dict = {"query": "query ($name: String) { Page(perPage: 7) { media(search: $name, type: " + type_media + ") { title { romaji english } " + count_type_media + " averageScore status coverImage { large } description siteUrl genres recommendations(perPage: 7, sort: RATING_DESC) { nodes { rating mediaRecommendation { title { romaji english } coverImage { large } siteUrl  type } } } } } }", "variables":{"name": name_media}}

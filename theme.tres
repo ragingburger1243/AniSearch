@@ -41,9 +41,22 @@ modulate_color = Color(0.15, 0.45, 0.7, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ddwj7"]
 bg_color = Color(0.15710118, 0.19405213, 0.2863025, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjfk0"]
 bg_color = Color(0.15686275, 0.19215687, 0.28627452, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 10
+shadow_color = Color(0.1273711, 0.1273711, 0.1273711, 0.6862745)
+shadow_size = 4
+shadow_offset = Vector2(0, 0.4)
 
 [sub_resource type="StyleBoxTexture" id="panel_normal"]
 content_margin_left = 10.0
@@ -56,6 +69,9 @@ texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 modulate_color = Color(0.15, 0.2, 0.3, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mycd"]
+bg_color = Color(0.27110568, 0.32660335, 0.46838617, 1)
 
 [resource]
 default_font_size = 15
@@ -70,3 +86,4 @@ Label/colors/font_color = Color(0.85, 0.9, 1, 1)
 LineEdit/styles/normal = SubResource("StyleBoxFlat_cjfk0")
 Panel/styles/panel = SubResource("panel_normal")
 PanelContainer/styles/panel = SubResource("panel_normal")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_7mycd")

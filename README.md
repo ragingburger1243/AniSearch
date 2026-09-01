@@ -7,6 +7,9 @@ A desktop anime and manga search app built with Godot that pulls data from the A
 - Toggle between anime and manga search
 - Displays title, episode/chapter count, score, status, genres, and description
 - Shows cover art
+- show user results
+- save to favourites list
+- good ui
 - Uses the AniList GraphQL API (no API key needed)
 
 ## Download
@@ -19,12 +22,8 @@ Grab the latest `.exe` and `.pck` from the [Releases](../../releases) page.
 4. Hit Play
 
 ## Roadmap
-- UI overhaul — cleaner layout, better styling, dark theme
-- Interactive game — anime quiz using AniList data (guess the anime from the description, cover art, or genres)
-- User profile lookup — search AniList users and view their stats
-- Multiple results — show a list of matches instead of just the top result
-- Favorites list — save anime/manga locally for quick access
-
+- finishing ui update
+- idk for the rest
 ## Built with
 - Godot 4 / GDScript
 - [AniList API](https://anilist.gitbook.io/anilist-apiv2-docs)
